@@ -1,0 +1,1 @@
+{"version":3,"names":[],"mappings":"","sources":["bundle.css"],"sourcesContent":["\n/* SCSS HEX */\n\n/* SCSS HSL */\n\n/* SCSS RGB */\n\n/* SCSS Gradient */\n.container {\n  width: 100%;\n  max-width: 100%;\n}\n"],"file":"bundle.css"}
