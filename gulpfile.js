@@ -5,8 +5,13 @@ const gulpSass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const concatCss = require('gulp-concat-css');
 const uglifyCss = require('gulp-uglifycss');
+const gulpTs = require('gulp-typescript');
+const concatJs = require('gulp-concat');
+const uglifyJs = require('gulp-uglify');
+const babel = require('gulp-babel');
 
 const compilerSass = gulpSass(sass);
+const tsProject = gulpTs.createProject('tsconfig.json');
 
 /**
  * Clean dist directory (delete all files)
@@ -29,22 +34,34 @@ function clean(callback) {
  */
 function compileStylesheet() {
   return gulp
-		.src('./src/scss/*.scss')
-		.pipe(compilerSass().on('error', compilerSass.logError))
-		.pipe(concatCss('bundle.css'))
-		.pipe(sourcemaps.init())
-		.pipe(uglifyCss())
-		.pipe(sourcemaps.write('./'))
-		.pipe(gulp.dest('./dist/stylesheet/'))
+      .src('./src/scss/*.scss')
+      .pipe(compilerSass().on('error', compilerSass.logError))
+      .pipe(concatCss('bundle.css'))
+      .pipe(uglifyCss())
+      .pipe(sourcemaps.init())
+      .pipe(sourcemaps.write('./'))
+      .pipe(gulp.dest('./dist/stylesheet/'));
 };
 
 /**
  * Compile TypeScript to JavaScript files
- * @param {Function} callback - Callback function
  * @return {void}
  */
-function compileJavaScript(callback) {
-  callback();
+function compileJavaScript() {
+  return gulp
+      .src('./src/typescript/*.ts')
+      .pipe(tsProject())
+      .pipe(babel({
+        presets: [
+          '@babel/env',
+          '@babel/preset-typescript'
+        ],
+      }))
+      .pipe(concatJs('bundle.js'))
+      .pipe(uglifyJs())
+      .pipe(sourcemaps.init())
+      .pipe(sourcemaps.write('./'))
+      .pipe(gulp.dest('./dist/javascript/'));
 };
 
 /**
@@ -52,8 +69,8 @@ function compileJavaScript(callback) {
  * @return {void}
  */
 function watch() {
-	gulp.watch('./src/scss/*.scss', compileStylesheet);
-	gulp.watch('./src/typescript/*.ts', compileJavaScript);
+  gulp.watch('./src/scss/*.scss', compileStylesheet);
+  gulp.watch('./src/typescript/*.ts', compileJavaScript);
 }
 
 module.exports.clean = clean;

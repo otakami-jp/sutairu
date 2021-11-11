@@ -7,8 +7,52 @@
 	<title>Document</title>
 
 	<link rel="stylesheet" href="../dist/stylesheet/bundle.css">
+  <script src="../dist/javascript/bundle.js"></script>
+
+  <style>
+    html, body, :root {
+      margin: 0;
+      padding: 0;
+      top: 0;
+      left: 0;
+    }
+
+    body {
+      background: rgb(2,0,36);
+      background: linear-gradient(30deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 30%, rgba(0,255,199,0.9066001400560224) 100%);
+    }
+
+    .loader {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.375);
+    }
+  </style>
 </head>
 <body>
-	Hello world !
+  <div class="loader">
+    <div id="spinner"></div>
+  </div>
+
+  <div>
+    Hello world !
+  </div>
+
+  <script>
+    const loading = new Spinner(
+      document.getElementById('spinner'),
+      {
+        changeContent: true,
+        changeContentTime: 1000,
+        changeContentLoop: true
+      }
+    )
+      .addContentList(['☜', '☜☜', '☜☜☜'])
+      .setMode('order')
+      .start();
+  </script>
 </body>
 </html>
